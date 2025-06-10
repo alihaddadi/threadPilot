@@ -12,6 +12,7 @@ The ThreadPilot solution follows a 2-layer API approach:
 - User Layer: Presents the data to consumers, retrieves it from the system layer, combines multiple sources, and applies transformations and validations. Optional business logic can be applied at this layer in complex scenarios.
 
 The solution includes the following projects:
+
 - threadPilotInsuranceInfo: Azure function app for insurance data.
 - threadPilotVehicleInfo: Azure function app for vehicle data.
 
@@ -21,13 +22,16 @@ The ThreadPilotUserApi contains an Azure Logic App solution called getUserInsura
 Source: Internal documentation
 
 b. How to run the solutions locally:
+
 To run the Azure function app projects, open the folders individually in VSCode or open threadPilotApi.sln in Visual Studio.
 For the Azure Logic App, open the solution in Visual Studio 2019 or VSCode. Modify the base URLs (SYSTEM_API_INSURANCE_URL and SYSTEM_API_VEHICLE_URL) in the workflow parameters. Debug the Logic App and use Postman to send a POST request to the endpoint shown in the overview.
 
 c. Error handling:
+
 Exception handling is implemented in the projects to handle various error cases. The Logic App handles exceptions by returning appropriate error messages or responses.
 
 d. Maintenance and Extensibility:
+
 The design focuses on minimal changes in the data access layer and flexibility in the user access layer. To add a new system access layer, copy an existing project structure and implement new APIs. For each distinct data source, create a new independent system API project. The user API layer can be extended by combining multiple data sources based on business requirements.
 
 e. Security Provisioning:
