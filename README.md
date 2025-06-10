@@ -1,10 +1,15 @@
 You will find a description of the following in this READ.ME:
 
 a. Architecture
+
 b. How to run the solutions locally
+
 c. Error handling
+
 d. Maintenance and extinsibility
+
 e. Security provisioning
+
 a. Architecture:
 
 The ThreadPilot solution follows a 2-layer API approach:
