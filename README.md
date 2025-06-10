@@ -10,6 +10,7 @@ d. Maintenance and extinsibility
 
 e. Security provisioning
 
+
 a. Architecture:
 
 The ThreadPilot solution follows a 2-layer API approach:
