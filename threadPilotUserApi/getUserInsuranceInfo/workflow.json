@@ -1,0 +1,183 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Call_Insurance_Info_API": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "@concat(parameters('SYSTEM_API_INSURANCE_URL'),parameters('INSURANCE_INFO_API_PATH'))",
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": "@triggerBody()"
+                },
+                "runAfter": {},
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "Condition": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@body('Parse_Insurance_Info_Result')?['insuranceType']",
+                                "Car"
+                            ]
+                        }
+                    ]
+                },
+                "actions": {
+                    "Call_Vehicle_Info_Api": {
+                        "type": "Http",
+                        "inputs": {
+                            "uri": "@concat(parameters('SYSTEM_API_VEHICLE_URL'),parameters('VEHICLE_INFO_API_PATH'),'/',body('Parse_Insurance_Info_Result')?['vehicleRegistrationNumber'])",
+                            "method": "GET"
+                        },
+                        "runtimeConfiguration": {
+                            "contentTransfer": {
+                                "transferMode": "Chunked"
+                            }
+                        }
+                    },
+                    "Response_With_Vehicle_Info": {
+                        "type": "Response",
+                        "kind": "Http",
+                        "inputs": {
+                            "statusCode": 200,
+                            "body": {
+                                "SSN": "@body('Parse_Insurance_Info_Result')?['ssn']",
+                                "Insurance Holder Name": "@body('Parse_Insurance_Info_Result')?['insuranceHolderName']",
+                                "Insurance Type": "@body('Parse_Insurance_Info_Result')?['insuranceType']",
+                                "Vehicle Information": "@body('Call_Vehicle_Info_Api')",
+                                "Insurance Price": "@body('Parse_Insurance_Info_Result')?['insurancePrice']"
+                            }
+                        },
+                        "runAfter": {
+                            "Call_Vehicle_Info_Api": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Response_With_Vehicle_Info_Error": {
+                        "type": "Response",
+                        "kind": "Http",
+                        "inputs": {
+                            "statusCode": 200,
+                            "body": {
+                                "SSN": "@body('Parse_Insurance_Info_Result')?['ssn']",
+                                "Insurance Holder Name": "@body('Parse_Insurance_Info_Result')?['insuranceHolderName']",
+                                "Insurance Type": "@body('Parse_Insurance_Info_Result')?['insuranceType']",
+                                "Vehicle Information": {
+                                    "Error Message": "Vehicle Information Not Found"
+                                },
+                                "Insurance Price": "@body('Parse_Insurance_Info_Result')?['insurancePrice']"
+                            }
+                        },
+                        "runAfter": {
+                            "Call_Vehicle_Info_Api": [
+                                "SKIPPED",
+                                "FAILED"
+                            ]
+                        }
+                    }
+                },
+                "else": {
+                    "actions": {
+                        "Response_Without_Vehicle_Info": {
+                            "type": "Response",
+                            "kind": "Http",
+                            "inputs": {
+                                "statusCode": 200,
+                                "body": {
+                                    "SSN": "@body('Parse_Insurance_Info_Result')?['ssn']",
+                                    "Insurance Holder Name": "@body('Parse_Insurance_Info_Result')?['insuranceHolderName']",
+                                    "Insurance Type": "@body('Parse_Insurance_Info_Result')?['insuranceType']",
+                                    "Insurance Price": "@body('Parse_Insurance_Info_Result')?['insurancePrice']"
+                                }
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Parse_Insurance_Info_Result": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Parse_Insurance_Info_Result": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Call_Insurance_Info_API')",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "ssn": {
+                                "type": "string"
+                            },
+                            "insuranceHolderName": {
+                                "type": "string"
+                            },
+                            "insurancePrice": {
+                                "type": "integer"
+                            },
+                            "insuranceType": {
+                                "type": "string"
+                            },
+                            "vehicleRegistrationNumber": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Call_Insurance_Info_API": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Response_No_Insurance_Found": {
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                    "statusCode": 404,
+                    "body": {
+                        "Error Message": "Insurance Not Found"
+                    }
+                },
+                "runAfter": {
+                    "Call_Insurance_Info_API": [
+                        "FAILED",
+                        "TIMEDOUT"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "insuranceInfo": {
+                "type": "Request",
+                "description": "When a request for insurance information comes in.",
+                "kind": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "SSN": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "operationOptions": "EnableSchemaValidation"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

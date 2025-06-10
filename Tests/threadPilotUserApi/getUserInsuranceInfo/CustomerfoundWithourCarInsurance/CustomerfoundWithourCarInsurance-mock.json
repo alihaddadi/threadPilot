@@ -1,0 +1,29 @@
+{
+  "triggerMocks": {
+    "insuranceInfo": {
+      "name": "insuranceInfo",
+      "status": "Succeeded",
+      "outputs": {
+        "body": {
+          "SSN": "444444444"
+        }
+      }
+    }
+  },
+  "actionMocks": {
+    "Call_Insurance_Info_API": {
+      "name": "Call_Insurance_Info_API",
+      "status": "Succeeded",
+      "outputs": {
+        "statusCode": 200,
+        "body": {
+          "ssn": "444444444",
+          "insuranceHolderName": "Charlie White",
+          "insurancePrice": 20,
+          "insuranceType": "Personal Health",
+          "vehicleRegistrationNumber": ""
+        }
+      }
+    }
+  }
+}

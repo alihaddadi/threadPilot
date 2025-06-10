@@ -1,0 +1,42 @@
+{
+  "triggerMocks": {
+    "insuranceInfo": {
+      "name": "insuranceInfo",
+      "status": "Succeeded",
+      "outputs": {
+        "body": {
+          "SSN": "555555555"
+        }
+      }
+    }
+  },
+  "actionMocks": {
+    "Call_Insurance_Info_API": {
+      "name": "Call_Insurance_Info_API",
+      "status": "Succeeded",
+      "outputs": {
+        "statusCode": 200,
+        "body": {
+          "ssn": "555555555",
+          "insuranceHolderName": "Alice Johnson",
+          "insurancePrice": 30,
+          "insuranceType": "Car",
+          "vehicleRegistrationNumber": "LMN456"
+        }
+      }
+    },
+    "Call_Vehicle_Info_Api": {
+      "name": "Call_Vehicle_Info_Api",
+      "status": "Succeeded",
+      "outputs": {
+        "statusCode": 200,
+        "body": {
+          "registrationNumber": "LMN456",
+          "model": "2022",
+          "make": "Ford Focus",
+          "chassiNumber": "1FADP3F23JL123456"
+        }
+      }
+    }
+  }
+}

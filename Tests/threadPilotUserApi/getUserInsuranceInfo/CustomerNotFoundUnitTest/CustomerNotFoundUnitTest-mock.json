@@ -1,0 +1,20 @@
+{
+  "triggerMocks": {
+    "insuranceInfo": {
+      "name": "insuranceInfo",
+      "status": "Succeeded",
+      "outputs": {}
+    }
+  },
+  "actionMocks": {
+    "Call_Insurance_Info_API": {
+      "name": "Call_Insurance_Info_API",
+      "status": "Failed",
+      "outputs": {
+        "statusCode": 404,
+        "body": "No customers found with the given social security number"
+      },
+      "error": null
+    }
+  }
+}

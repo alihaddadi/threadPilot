@@ -1,0 +1,38 @@
+{
+  "triggerMocks": {
+    "insuranceInfo": {
+      "name": "insuranceInfo",
+      "status": "Succeeded",
+      "outputs": {
+        "body": {
+          "SSN": "222334444"
+        }
+      }
+    }
+  },
+  "actionMocks": {
+    "Call_Insurance_Info_API": {
+      "name": "Call_Insurance_Info_API",
+      "status": "Succeeded",
+      "outputs": {
+        "statusCode": 200,
+        "body": {
+          "ssn": "222334444",
+          "insuranceHolderName": "Diana Green",
+          "insurancePrice": 30,
+          "insuranceType": "Car",
+          "vehicleRegistrationNumber": "WXY987"
+        }
+      }
+    },
+    "Call_Vehicle_Info_Api": {
+      "name": "Call_Vehicle_Info_Api",
+      "status": "Failed",
+      "outputs": {
+        "statusCode": 404,
+        "body": "No vehicles found with plate number: WXY987"
+      },
+      "error": null
+    }
+  }
+}
