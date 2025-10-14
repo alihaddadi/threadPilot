@@ -23,6 +23,9 @@
         <mxCell id="G3r-rwU6vW7jSh2wYFKs-2" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="700" y="520" width="80" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="G3r-rwU6vW7jSh2wYFKs-3" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="190" y="470" width="60" height="80" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
